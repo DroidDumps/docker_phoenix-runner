@@ -1,0 +1,54 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+    - 'main'
+  workflow_dispatch:
+
+env:
+  DOCKER_USERNAME: fr3akyphantom
+  DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+  IMAGE_NAME: phoenix_firmware_dumper
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Bypass Build
+        if: "contains(github.event.head_commit.message, '[skip ci]')"
+        run: echo -en "Bypassing the main build, because the commit message contains - [skip ci]" && exit 0
+
+      - uses: actions/checkout@v2
+
+      - name: Create & Push the phoenix_firmware_dumper runner Container
+        if: "! contains(github.event.head_commit.message, '[skip ci]')"
+        run: >-
+          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+          echo ".git" > .dockerignore
+
+          docker build . --file Dockerfile
+          --rm --force-rm --compress --no-cache=true --pull
+          --label com.circleci.preserve-entrypoint=true
+          --label org.label-schema.build-date=$(date -u +"%Y-%m-%dT%H:%M:%S%Z")
+          --label org.label-schema.name="${IMAGE_NAME}"
+          --label org.label-schema.description="ROM Dumper, Based Upon Dumpyara from AndroidDumps, Infused w/ their Firmware_extractor"
+          --label org.label-schema.url="https://rokibhasansagar.github.io"
+          --label org.label-schema.vcs-ref=$(git rev-parse --short HEAD)
+          --label org.label-schema.vcs-url=$(git remote get-url origin)
+          --label org.label-schema.vendor="Rokib Hasan Sagar"
+          --label org.label-schema.version='1.0.1'
+          --label org.label-schema.schema-version="1.0"
+          --tag $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+          
+          docker tag $DOCKER_USERNAME/$IMAGE_NAME:latest $DOCKER_USERNAME/$IMAGE_NAME:$(date -u +"%Y.%j.%H")
+          
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$(date -u +"%Y.%j.%H")
+
