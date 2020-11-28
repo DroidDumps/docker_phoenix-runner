@@ -7,9 +7,11 @@ RUN printf "Adding Alpine Edge Package Support...\n" \
 
 RUN apk update -q --progress \
   && apk add --progress --no-cache --purge \
-    bash bash-completion binutils coreutils scanelf ncurses ncurses-dev findutils grep dpkg musl-dev libffi gawk sed file sharutils xterm \
-    wget curl aria2 ca-certificates gzip cpio bzip2 libbz2 lz4 xz-dev xz xz-libs zlib lzo lzop brotli tar zstd zstd-dev p7zip \
-    gcc libgcc libstdc++ linux-headers libc-dev git libxml2 libfdt dtc-dev openssh openssl libcrypto1.1 libssl1.1 gnupg detox bc xxd
+    bash bash-completion binutils coreutils scanelf ncurses ncurses-dev findutils grep dpkg musl-dev libffi libffi-dev gawk sed file sharutils xterm \
+    wget curl aria2 ca-certificates gzip cpio bzip2 bzip2-dev libbz2 lz4 lz4-dev xz xz-dev xz-libs zlib zlib-dev lzo lzop brotli brotli-dev tar zstd zstd-dev p7zip \
+    gcc libgcc libstdc++ linux-headers libc-dev git libxml2 libfdt dtc-dev openssh openssl openssl-dev libcrypto1.1 libssl1.1 gnupg detox bc xxd \
+  && apk upgrade -q --progress \
+  && rm -rf /var/cache/apk/* 2>/dev/null
 
 ENV TERM=xterm-256color
 
