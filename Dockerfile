@@ -15,9 +15,10 @@ RUN apk update -q --progress \
 
 ENV TERM=xterm-256color
 
-RUN wget -q -O get-pip.py https://github.com/pypa/get-pip/raw/master/get-pip.py \
+RUN set -xe \
+  && wget -q -O get-pip.py https://bootstrap.pypa.io/get-pip.py \
   && python3 get-pip.py --upgrade --disable-pip-version-check --no-cache-dir \
   && rm -f get-pip.py \
-  && pip3 install future requests humanize clint backports.lzma lz4 zstandard protobuf pycrypto pycryptodome docopt \
+  && pip3 install future requests humanize clint backports.lzma lz4 zstandard protobuf pycryptodome docopt \
   && find /usr/local -depth \( \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
     -o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \) -exec rm -rf '{}' +; 2>/dev/null
