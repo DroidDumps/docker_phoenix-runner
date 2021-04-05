@@ -12,7 +12,6 @@ RUN apk update -q --progress --force-refresh \
     wget curl aria2 ca-certificates gzip cpio bzip2 bzip2-dev libbz2 lz4 lz4-dev xz xz-dev xz-libs zlib zlib-dev lzo lzop brotli brotli-dev tar zstd zstd-dev p7zip \
     gcc libgcc libstdc++ linux-headers libc-dev git libxml2 libfdt dtc-dev openssh openssl openssl-dev libcrypto1.1 libssl1.1 gnupg detox bc xxd \
     py3-future py3-requests py3-humanize py3-lz4 py3-zstandard py3-protobuf py3-pycryptodome py3-docopt \
-  && apk upgrade -q --progress \
   && find /usr/local/lib /usr/lib -depth \( \( -type d -a \( -name "__pycache__" -o -name test -o -name tests -o -name idle_test \) \) \
     -o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \) -exec rm -rf '{}' +; 2>/dev/null
   && rm -rf /var/cache/apk/* 2>/dev/null
