@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.13
+FROM python:3.9-alpine3.18
 
 RUN printf "Adding Alpine Edge Package Support...\n" \
   && printf "http://dl-cdn.alpinelinux.org/alpine/edge/main\n" >> /etc/apk/repositories \
